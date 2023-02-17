@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33403.182
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documentation", "documentation", "{4B1A0513-679A-4AAD-B72E-57DACDB3EBA8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{79A3A582-E82C-45CE-B5BF-EE3EFB4DF49D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "postmancollections", "postmancollections", "{BF15608F-7957-4C6E-BCB2-582B328B99E4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{62C65201-590B-456D-BCB8-8CC29D8525B0}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2D293819-6007-4D2B-8818-D84168702524}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inventory.API", "src\Inventory.API\Inventory.API.csproj", "{F3BC3971-8EB5-4B4C-85EF-0D6C142EA07A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.Data", "src\Inventory.Data\Inventory.Data.csproj", "{1C147E76-444E-44DF-988F-8823970DF921}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F3BC3971-8EB5-4B4C-85EF-0D6C142EA07A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3BC3971-8EB5-4B4C-85EF-0D6C142EA07A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3BC3971-8EB5-4B4C-85EF-0D6C142EA07A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3BC3971-8EB5-4B4C-85EF-0D6C142EA07A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C147E76-444E-44DF-988F-8823970DF921}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C147E76-444E-44DF-988F-8823970DF921}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C147E76-444E-44DF-988F-8823970DF921}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C147E76-444E-44DF-988F-8823970DF921}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{79A3A582-E82C-45CE-B5BF-EE3EFB4DF49D} = {4B1A0513-679A-4AAD-B72E-57DACDB3EBA8}
+		{F3BC3971-8EB5-4B4C-85EF-0D6C142EA07A} = {2D293819-6007-4D2B-8818-D84168702524}
+		{1C147E76-444E-44DF-988F-8823970DF921} = {2D293819-6007-4D2B-8818-D84168702524}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {868E91CC-0EA8-4D40-A5FC-F2D572BA1440}
+	EndGlobalSection
+EndGlobal
