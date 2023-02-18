@@ -1,4 +1,5 @@
 ﻿using CommonLibrary.Interfaces;
+using Inventory.API.Clients;
 using Inventory.Data.Dtos;
 using Inventory.Data.Entities;
 using Inventory.Data.Extensions;
@@ -11,10 +12,13 @@ namespace Inventory.API.Controllers;
 public class ItemsController : ControllerBase
 {
     private readonly IRepository<InventoryItem> _itemsRepository;
+    private readonly CatalogClient _catalogClient;
 
-    public ItemsController(IRepository<InventoryItem> itemsRepository)
+    public ItemsController(IRepository<InventoryItem> itemsRepository, CatalogClient catalogClient)
     {
-        _itemsRepository = itemsRepository;
+        _itemsRepository = itemsRepository ?? throw new ArgumentNullException(nameof(itemsRepository));
+
+        _catalogClient = catalogClient ?? throw new ArgumentNullException(nameof(catalogClient));
     }
 
     [HttpGet]
