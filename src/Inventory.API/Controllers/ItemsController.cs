@@ -1,4 +1,5 @@
 ﻿using CommonLibrary.Interfaces;
+using Inventory.API.Clients;
 using Inventory.Data.Dtos;
 using Inventory.Data.Entities;
 using Inventory.Data.Extensions;
@@ -11,10 +12,13 @@ namespace Inventory.API.Controllers;
 public class ItemsController : ControllerBase
 {
     private readonly IRepository<InventoryItem> _itemsRepository;
+    private readonly CatalogClient _catalogClient;
 
-    public ItemsController(IRepository<InventoryItem> itemsRepository)
+    public ItemsController(IRepository<InventoryItem> itemsRepository, CatalogClient catalogClient)
     {
-        _itemsRepository = itemsRepository;
+        _itemsRepository = itemsRepository ?? throw new ArgumentNullException(nameof(itemsRepository));
+
+        _catalogClient = catalogClient ?? throw new ArgumentNullException(nameof(catalogClient));
     }
 
     [HttpGet]
@@ -25,10 +29,18 @@ public class ItemsController : ControllerBase
             return BadRequest();
         }
 
-        var items = (await _itemsRepository.GetAllAsync(item => item.UserId == userId))
-                    .Select(item => item.AsDto());
+        var catalogItems = await _catalogClient.GetCatalogItemsAsync();
 
-        return Ok(items);
+        var inventoryItemEntities = await _itemsRepository.GetAllAsync(item => item.UserId == userId);
+
+        var inventoryItemDtos = inventoryItemEntities.Select(inventoryItem =>
+        {
+            var catalogItem = catalogItems?.Single(catalogItem => catalogItem.Id == inventoryItem.CatalogItemId);
+
+            return inventoryItem.AsDto(catalogItem?.Name!, catalogItem?.Description!);
+        });
+
+        return Ok(inventoryItemDtos);
     }
 
     [HttpPost]
@@ -37,7 +49,7 @@ public class ItemsController : ControllerBase
         var inventoryItem = await _itemsRepository.GetAsync(
             item => item.UserId == grantItemsDto.UserId && item.CatalogItemId == grantItemsDto.CatalogItemId);
 
-        if (inventoryItem == null)
+        if (inventoryItem is null)
         {
             inventoryItem = new InventoryItem
             {
