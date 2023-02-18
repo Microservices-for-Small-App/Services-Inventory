@@ -37,7 +37,7 @@ public class ItemsController : ControllerBase
         var inventoryItem = await _itemsRepository.GetAsync(
             item => item.UserId == grantItemsDto.UserId && item.CatalogItemId == grantItemsDto.CatalogItemId);
 
-        if (inventoryItem == null)
+        if (inventoryItem is null)
         {
             inventoryItem = new InventoryItem
             {
