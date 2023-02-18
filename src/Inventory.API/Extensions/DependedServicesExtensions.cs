@@ -30,6 +30,7 @@ public static class DependedServicesExtensions
 
         _ = services.AddMongo().AddMongoRepository<InventoryItem>();
 
+        // Typed clients :: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/http-requests?view=aspnetcore-7.0
         _ = services.AddHttpClient<CatalogClient>(client =>
         {
             client.BaseAddress = new Uri("https://localhost:5001");
