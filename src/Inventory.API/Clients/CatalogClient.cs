@@ -8,7 +8,7 @@ public class CatalogClient
 
     public CatalogClient(HttpClient httpClient)
     {
-        this._httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }
 
     public async Task<IReadOnlyCollection<CatalogItemDto>?> GetCatalogItemsAsync()
