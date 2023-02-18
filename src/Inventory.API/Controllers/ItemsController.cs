@@ -29,10 +29,18 @@ public class ItemsController : ControllerBase
             return BadRequest();
         }
 
-        var items = (await _itemsRepository.GetAllAsync(item => item.UserId == userId))
-                    .Select(item => item.AsDto());
+        var catalogItems = await _catalogClient.GetCatalogItemsAsync();
 
-        return Ok(items);
+        var inventoryItemEntities = await _itemsRepository.GetAllAsync(item => item.UserId == userId);
+
+        var inventoryItemDtos = inventoryItemEntities.Select(inventoryItem =>
+        {
+            var catalogItem = catalogItems?.Single(catalogItem => catalogItem.Id == inventoryItem.CatalogItemId);
+
+            return inventoryItem.AsDto(catalogItem?.Name!, catalogItem?.Description!);
+        });
+
+        return Ok(inventoryItemDtos);
     }
 
     [HttpPost]

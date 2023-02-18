@@ -1,5 +1,6 @@
 ﻿using CommonLibrary.MongoDB.Extensions;
 using CommonLibrary.Settings;
+using Inventory.API.Clients;
 using Inventory.Data.Entities;
 
 namespace Inventory.API.Extensions;
@@ -28,6 +29,11 @@ public static class DependedServicesExtensions
         });
 
         _ = services.AddMongo().AddMongoRepository<InventoryItem>();
+
+        _ = services.AddHttpClient<CatalogClient>(client =>
+        {
+            client.BaseAddress = new Uri("https://localhost:5001");
+        });
 
         _ = services.AddControllers(options =>
         {
