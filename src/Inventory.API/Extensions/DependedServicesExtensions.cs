@@ -40,7 +40,8 @@ public static class DependedServicesExtensions
           .AddTransientHttpErrorPolicy(builder => builder.Or<TimeoutRejectedException>()
             .WaitAndRetryAsync(
               5,
-              retryCount => TimeSpan.FromSeconds(Math.Pow(2, retryCount)),
+              retryCount => TimeSpan.FromSeconds(Math.Pow(2, retryCount))
+                                + TimeSpan.FromMilliseconds(new Random().Next(0, 1000)),
               onRetry: (outcome, timespan, retryCount) =>
               {
                   Console.WriteLine($"Delaying for {timespan} seconds, before making retry {retryCount}");
