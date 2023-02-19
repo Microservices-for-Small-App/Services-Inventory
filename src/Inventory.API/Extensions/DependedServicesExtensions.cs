@@ -2,6 +2,7 @@
 using CommonLibrary.Settings;
 using Inventory.API.Clients;
 using Inventory.Data.Entities;
+using Polly;
 
 namespace Inventory.API.Extensions;
 
@@ -34,7 +35,8 @@ public static class DependedServicesExtensions
         _ = services.AddHttpClient<CatalogClient>(client =>
         {
             client.BaseAddress = new Uri("https://localhost:5001");
-        });
+        })
+          .AddPolicyHandler(Policy.TimeoutAsync<HttpResponseMessage>(1)); ;
 
         _ = services.AddControllers(options =>
         {
