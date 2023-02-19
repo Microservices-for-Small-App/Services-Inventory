@@ -3,6 +3,7 @@ using CommonLibrary.Settings;
 using Inventory.API.Clients;
 using Inventory.Data.Entities;
 using Polly;
+using Polly.Timeout;
 
 namespace Inventory.API.Extensions;
 
@@ -36,7 +37,18 @@ public static class DependedServicesExtensions
         {
             client.BaseAddress = new Uri("https://localhost:5001");
         })
-          .AddPolicyHandler(Policy.TimeoutAsync<HttpResponseMessage>(1)); ;
+          .AddTransientHttpErrorPolicy(builder => builder.Or<TimeoutRejectedException>()
+            .WaitAndRetryAsync(
+              5,
+              retryCount => TimeSpan.FromSeconds(Math.Pow(2, retryCount)),
+              onRetry: (outcome, timespan, retryCount) =>
+              {
+                  Console.WriteLine($"Delaying for {timespan} seconds, before making retry {retryCount}");
+                  //services?.BuildServiceProvider()?.GetService<ILogger<CatalogClient>>()
+                  //      ?.LogWarning($"Delaying for {timespan} seconds, before making retry {retryCount}");
+              }
+           ))
+          .AddPolicyHandler(Policy.TimeoutAsync<HttpResponseMessage>(1));
 
         _ = services.AddControllers(options =>
         {
