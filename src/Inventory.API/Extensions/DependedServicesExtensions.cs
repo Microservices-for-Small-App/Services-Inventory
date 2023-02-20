@@ -44,7 +44,7 @@ public static class DependedServicesExtensions
                                 + TimeSpan.FromMilliseconds(new Random().Next(0, 1000)),
               onRetry: (outcome, timespan, retryCount) =>
               {
-                  Console.WriteLine($"Delaying for {timespan} seconds, before making retry {retryCount}");
+                  Console.WriteLine($"Delaying for {timespan.TotalSeconds} seconds, before making retry {retryCount}");
                   //services?.BuildServiceProvider()?.GetService<ILogger<CatalogClient>>()
                   //      ?.LogWarning($"Delaying for {timespan} seconds, before making retry {retryCount}");
               }
