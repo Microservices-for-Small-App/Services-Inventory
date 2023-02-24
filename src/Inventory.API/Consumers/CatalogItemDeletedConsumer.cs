@@ -11,7 +11,7 @@ public class CatalogItemDeletedConsumer : IConsumer<CatalogItemDeleted>
 
     public CatalogItemDeletedConsumer(IRepository<CatalogItem> catalogItemrepository)
     {
-        _catalogItemrepository = catalogItemrepository;
+        _catalogItemrepository = catalogItemrepository ?? throw new ArgumentNullException(nameof(catalogItemrepository));
     }
 
     public async Task Consume(ConsumeContext<CatalogItemDeleted> context)
@@ -20,7 +20,7 @@ public class CatalogItemDeletedConsumer : IConsumer<CatalogItemDeleted>
 
         var item = await _catalogItemrepository.GetAsync(message.ItemId);
 
-        if (item == null)
+        if (item is null)
         {
             return;
         }
