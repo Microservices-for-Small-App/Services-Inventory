@@ -14,9 +14,9 @@ public class ItemsController : ControllerBase
     private readonly IRepository<InventoryItem> _inventoryItemsRepository;
     private readonly CatalogClient _catalogClient;
 
-    public ItemsController(IRepository<InventoryItem> itemsRepository, CatalogClient catalogClient)
+    public ItemsController(IRepository<InventoryItem> inventoryItemsRepository, CatalogClient catalogClient)
     {
-        _inventoryItemsRepository = itemsRepository ?? throw new ArgumentNullException(nameof(itemsRepository));
+        _inventoryItemsRepository = inventoryItemsRepository ?? throw new ArgumentNullException(nameof(inventoryItemsRepository));
 
         _catalogClient = catalogClient ?? throw new ArgumentNullException(nameof(catalogClient));
     }
