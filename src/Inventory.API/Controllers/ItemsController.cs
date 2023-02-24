@@ -11,12 +11,12 @@ namespace Inventory.API.Controllers;
 [ApiController]
 public class ItemsController : ControllerBase
 {
-    private readonly IRepository<InventoryItem> _itemsRepository;
+    private readonly IRepository<InventoryItem> _inventoryItemsRepository;
     private readonly CatalogClient _catalogClient;
 
     public ItemsController(IRepository<InventoryItem> itemsRepository, CatalogClient catalogClient)
     {
-        _itemsRepository = itemsRepository ?? throw new ArgumentNullException(nameof(itemsRepository));
+        _inventoryItemsRepository = itemsRepository ?? throw new ArgumentNullException(nameof(itemsRepository));
 
         _catalogClient = catalogClient ?? throw new ArgumentNullException(nameof(catalogClient));
     }
@@ -31,7 +31,7 @@ public class ItemsController : ControllerBase
 
         var catalogItems = await _catalogClient.GetCatalogItemsAsync();
 
-        var inventoryItemEntities = await _itemsRepository.GetAllAsync(item => item.UserId == userId);
+        var inventoryItemEntities = await _inventoryItemsRepository.GetAllAsync(item => item.UserId == userId);
 
         var inventoryItemDtos = inventoryItemEntities.Select(inventoryItem =>
         {
@@ -46,7 +46,7 @@ public class ItemsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> PostAsync(GrantItemsDto grantItemsDto)
     {
-        var inventoryItem = await _itemsRepository.GetAsync(
+        var inventoryItem = await _inventoryItemsRepository.GetAsync(
             item => item.UserId == grantItemsDto.UserId && item.CatalogItemId == grantItemsDto.CatalogItemId);
 
         if (inventoryItem is null)
@@ -59,12 +59,12 @@ public class ItemsController : ControllerBase
                 AcquiredDate = DateTimeOffset.UtcNow
             };
 
-            await _itemsRepository.CreateAsync(inventoryItem);
+            await _inventoryItemsRepository.CreateAsync(inventoryItem);
         }
         else
         {
             inventoryItem.Quantity += grantItemsDto.Quantity;
-            await _itemsRepository.UpdateAsync(inventoryItem);
+            await _inventoryItemsRepository.UpdateAsync(inventoryItem);
         }
 
         return Ok();
