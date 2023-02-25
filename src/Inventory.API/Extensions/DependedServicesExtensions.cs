@@ -30,7 +30,9 @@ public static class DependedServicesExtensions
                     ?.GetSection(nameof(MongoDbCollectionSettings)).Get<MongoDbCollectionSettings>()!;
         });
 
-        _ = services.AddMongo().AddMongoRepository<InventoryItem>();
+        _ = services.AddMongo()
+            .AddMongoRepository<InventoryItem>("inventoryitems")
+            .AddMongoRepository<CatalogItem>("catalogitems");
 
         _ = services.AddCatalogClient();
 
