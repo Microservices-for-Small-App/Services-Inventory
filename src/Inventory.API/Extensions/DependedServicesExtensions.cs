@@ -32,6 +32,27 @@ public static class DependedServicesExtensions
 
         _ = services.AddMongo().AddMongoRepository<InventoryItem>();
 
+        _ = services.AddCatalogClient();
+
+        _ = services.AddControllers(options =>
+        {
+            options.SuppressAsyncSuffixInActionNames = false;
+        });
+
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        _ = services.AddEndpointsApiExplorer();
+        _ = services.AddSwaggerGen();
+
+        _ = services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll", policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+        });
+
+        return services;
+    }
+
+    private static IServiceCollection AddCatalogClient(this IServiceCollection services)
+    {
         // Typed clients :: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/http-requests?view=aspnetcore-7.0
         _ = services.AddHttpClient<CatalogClient>(client =>
         {
@@ -49,21 +70,25 @@ public static class DependedServicesExtensions
                   //      ?.LogWarning($"Delaying for {timespan} seconds, before making retry {retryCount}");
               }
            ))
+          .AddTransientHttpErrorPolicy(builder => builder.Or<TimeoutRejectedException>().CircuitBreakerAsync(
+                3,
+                TimeSpan.FromSeconds(15),
+                onBreak: (outcome, timespan) =>
+                {
+                    //var serviceProvider = services.BuildServiceProvider();
+                    //serviceProvider.GetService<ILogger<CatalogClient>>()?
+                    //    .LogWarning($"Opening the circuit for {timespan.TotalSeconds} seconds...");
+                    Console.WriteLine($"Opening the circuit for {timespan.TotalSeconds} seconds...");
+                },
+                onReset: () =>
+                {
+                    //var serviceProvider = services.BuildServiceProvider();
+                    //serviceProvider.GetService<ILogger<CatalogClient>>()?
+                    //    .LogWarning($"Closing the circuit...");
+                    Console.WriteLine($"Closing the circuit...");
+                }
+            ))
           .AddPolicyHandler(Policy.TimeoutAsync<HttpResponseMessage>(1));
-
-        _ = services.AddControllers(options =>
-        {
-            options.SuppressAsyncSuffixInActionNames = false;
-        });
-
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        _ = services.AddEndpointsApiExplorer();
-        _ = services.AddSwaggerGen();
-
-        _ = services.AddCors(options =>
-        {
-            options.AddPolicy("AllowAll", policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
-        });
 
         return services;
     }
