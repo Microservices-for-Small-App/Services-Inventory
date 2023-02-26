@@ -2,6 +2,7 @@
 using CommonLibrary.Settings;
 using Inventory.API.Clients;
 using Inventory.Data.Entities;
+using Play.Common.MassTransit;
 using Polly;
 using Polly.Timeout;
 
@@ -30,7 +31,10 @@ public static class DependedServicesExtensions
                     ?.GetSection(nameof(MongoDbCollectionSettings)).Get<MongoDbCollectionSettings>()!;
         });
 
-        _ = services.AddMongo().AddMongoRepository<InventoryItem>();
+        _ = services.AddMongo()
+            .AddMongoRepository<InventoryItem>("inventoryitems")
+            .AddMongoRepository<CatalogItem>("catalogitems")
+            .AddMassTransitWithRabbitMq();
 
         _ = services.AddCatalogClient();
 
