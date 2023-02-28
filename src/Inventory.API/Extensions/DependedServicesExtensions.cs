@@ -11,7 +11,7 @@ namespace Inventory.API.Extensions;
 public static class DependedServicesExtensions
 {
 
-    public static IServiceCollection ConfigureDependedServices(this IServiceCollection services)
+    public static IServiceCollection ConfigureDependedServices(this IServiceCollection services, IConfiguration configuration)
     {
         _ = services.AddSingleton(serviceProvider =>
         {
@@ -49,7 +49,8 @@ public static class DependedServicesExtensions
 
         _ = services.AddCors(options =>
         {
-            options.AddPolicy("AllowAll", policy => policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+            options.AddPolicy("AllowAll", policy => policy.WithOrigins(configuration?["AllowedOrigin"]!)
+                                                            .AllowAnyHeader().AllowAnyMethod());
         });
 
         return services;
