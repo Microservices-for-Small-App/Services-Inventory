@@ -1,8 +1,8 @@
-﻿using CommonLibrary.MongoDB.Extensions;
+﻿using CommonLibrary.MassTransit;
+using CommonLibrary.MongoDB.Extensions;
 using CommonLibrary.Settings;
 using Inventory.API.Clients;
 using Inventory.Data.Entities;
-using Play.Common.MassTransit;
 using Polly;
 using Polly.Timeout;
 
