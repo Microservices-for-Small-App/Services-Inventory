@@ -1,4 +1,5 @@
-﻿using CommonLibrary.MassTransit;
+﻿using CommonLibrary.Identity;
+using CommonLibrary.MassTransit;
 using CommonLibrary.MongoDB.Extensions;
 using CommonLibrary.Settings;
 using Inventory.API.Clients;
@@ -34,7 +35,8 @@ public static class DependedServicesExtensions
         _ = services.AddMongo()
             .AddMongoRepository<InventoryItem>("inventoryitems")
             .AddMongoRepository<CatalogItem>("catalogitems")
-            .AddMassTransitWithRabbitMq();
+            .AddMassTransitWithRabbitMq()
+            .AddJwtBearerAuthentication();
 
         _ = services.AddCatalogClient();
 
