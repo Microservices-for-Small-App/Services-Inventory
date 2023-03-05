@@ -14,6 +14,8 @@ public static class HttpRequestPipelineExtensions
 
         app.UseHttpsRedirection();
 
+        app.UseAuthentication();
+
         app.UseAuthorization();
 
         app.MapControllers();

@@ -2,12 +2,14 @@
 using Inventory.Data.Dtos;
 using Inventory.Data.Entities;
 using Inventory.Data.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inventory.API.Controllers;
 
 [Route("api/items")]
 [ApiController]
+[Authorize]
 public class ItemsController : ControllerBase
 {
     private readonly IRepository<InventoryItem> _inventoryItemsRepository;

@@ -1,8 +1,9 @@
-﻿using CommonLibrary.MongoDB.Extensions;
+﻿using CommonLibrary.Identity;
+using CommonLibrary.MassTransit;
+using CommonLibrary.MongoDB.Extensions;
 using CommonLibrary.Settings;
 using Inventory.API.Clients;
 using Inventory.Data.Entities;
-using Play.Common.MassTransit;
 using Polly;
 using Polly.Timeout;
 
@@ -34,7 +35,8 @@ public static class DependedServicesExtensions
         _ = services.AddMongo()
             .AddMongoRepository<InventoryItem>("inventoryitems")
             .AddMongoRepository<CatalogItem>("catalogitems")
-            .AddMassTransitWithRabbitMq();
+            .AddMassTransitWithRabbitMq()
+            .AddJwtBearerAuthentication();
 
         _ = services.AddCatalogClient();
 
