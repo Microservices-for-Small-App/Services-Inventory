@@ -1,4 +1,6 @@
-﻿using CommonLibrary.Interfaces;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using CommonLibrary.Interfaces;
 using Inventory.Data.Dtos;
 using Inventory.Data.Entities;
 using Inventory.Data.Extensions;
@@ -31,6 +33,16 @@ public class ItemsController : ControllerBase
         if (userId == Guid.Empty)
         {
             return BadRequest();
+        }
+
+        var currentUserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+
+        if (Guid.Parse(currentUserId!) != userId)
+        {
+            if (!User.IsInRole(AdminRole))
+            {
+                return Forbid();
+            }
         }
 
         var inventoryItemEntities = await _inventoryItemsRepository.GetAllAsync(item => item.UserId == userId);
