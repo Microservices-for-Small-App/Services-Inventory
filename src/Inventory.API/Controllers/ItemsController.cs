@@ -9,9 +9,11 @@ namespace Inventory.API.Controllers;
 
 [Route("api/items")]
 [ApiController]
-[Authorize]
+// [Authorize]
 public class ItemsController : ControllerBase
 {
+    private const string AdminRole = "Admin";
+
     private readonly IRepository<InventoryItem> _inventoryItemsRepository;
     private readonly IRepository<CatalogItem> _catalogItemsRepository;
 
@@ -23,6 +25,7 @@ public class ItemsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<IReadOnlyCollection<InventoryItemDto>>> GetAsync(Guid userId)
     {
         if (userId == Guid.Empty)
@@ -47,6 +50,7 @@ public class ItemsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = AdminRole)]
     public async Task<ActionResult> PostAsync(GrantItemsDto grantItemsDto)
     {
         var inventoryItem = await _inventoryItemsRepository.GetAsync(
