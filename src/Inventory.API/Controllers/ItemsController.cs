@@ -4,14 +4,18 @@ using Inventory.Data.Entities;
 using Inventory.Data.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Inventory.API.Controllers;
 
 [Route("api/items")]
 [ApiController]
-[Authorize]
+// [Authorize]
 public class ItemsController : ControllerBase
 {
+    private const string AdminRole = "Admin";
+
     private readonly IRepository<InventoryItem> _inventoryItemsRepository;
     private readonly IRepository<CatalogItem> _catalogItemsRepository;
 
@@ -23,11 +27,22 @@ public class ItemsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<IReadOnlyCollection<InventoryItemDto>>> GetAsync(Guid userId)
     {
         if (userId == Guid.Empty)
         {
             return BadRequest();
+        }
+
+        var currentUserId = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+
+        if (Guid.Parse(currentUserId!) != userId)
+        {
+            if (!User.IsInRole(AdminRole))
+            {
+                return Forbid();
+            }
         }
 
         var inventoryItemEntities = await _inventoryItemsRepository.GetAllAsync(item => item.UserId == userId);
@@ -47,6 +62,7 @@ public class ItemsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = AdminRole)]
     public async Task<ActionResult> PostAsync(GrantItemsDto grantItemsDto)
     {
         var inventoryItem = await _inventoryItemsRepository.GetAsync(
