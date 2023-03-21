@@ -24,7 +24,7 @@ public class SubtractItemsConsumer : IConsumer<SubtractItems>
 
         var item = await _catalogItemsRepository.GetAsync(message.CatalogItemId);
 
-        if (item == null)
+        if (item is null)
         {
             throw new UnknownItemException(message.CatalogItemId);
         }
@@ -32,7 +32,7 @@ public class SubtractItemsConsumer : IConsumer<SubtractItems>
         var inventoryItem = await _inventoryItemsRepository.GetAsync(
             item => item.UserId == message.UserId && item.CatalogItemId == message.CatalogItemId);
 
-        if (inventoryItem != null)
+        if (inventoryItem is not null)
         {
             inventoryItem.Quantity -= message.Quantity;
             await _inventoryItemsRepository.UpdateAsync(inventoryItem);

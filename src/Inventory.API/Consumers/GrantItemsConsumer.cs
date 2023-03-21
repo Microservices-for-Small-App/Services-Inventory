@@ -1,4 +1,5 @@
 ﻿using CommonLibrary.Interfaces;
+using Inventory.API.Exceptions;
 using Inventory.Contracts;
 using Inventory.Data.Entities;
 using MassTransit;
@@ -23,7 +24,7 @@ public class GrantItemsConsumer : IConsumer<GrantItems>
 
         var item = await _catalogItemsRepository.GetAsync(message.CatalogItemId);
 
-        if (item == null)
+        if (item is null)
         {
             throw new UnknownItemException(message.CatalogItemId);
         }
@@ -31,7 +32,7 @@ public class GrantItemsConsumer : IConsumer<GrantItems>
         var inventoryItem = await _inventoryItemsRepository.GetAsync(
             item => item.UserId == message.UserId && item.CatalogItemId == message.CatalogItemId);
 
-        if (inventoryItem == null)
+        if (inventoryItem is null)
         {
             inventoryItem = new InventoryItem
             {
