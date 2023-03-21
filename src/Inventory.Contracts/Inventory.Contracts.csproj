@@ -4,6 +4,18 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Platforms>AnyCPU</Platforms>
+    <PackageId>Inventory.Contracts</PackageId>
+    <Version>1.0.2</Version>
+    <Authors>Viswanatha Swamy P K</Authors>
+    <Company>Home</Company>
+    <Product>Small Microservices Application</Product>
+    <Description>This package provides Inventory.Contracts for Mass Transit</Description>
+    <Copyright>© 2023 Swamy Home</Copyright>
+    <PackageTags>Inventory-Contracts</PackageTags>
+    <PackageReleaseNotes>Initial version 1.1</PackageReleaseNotes>
+    <AssemblyVersion>1.2</AssemblyVersion>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
 </Project>
