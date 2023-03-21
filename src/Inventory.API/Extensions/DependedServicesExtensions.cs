@@ -2,7 +2,9 @@
 using CommonLibrary.MassTransit;
 using CommonLibrary.MongoDB.Extensions;
 using CommonLibrary.Settings;
+using GreenPipes;
 using Inventory.API.Clients;
+using Inventory.API.Exceptions;
 using Inventory.Data.Entities;
 using Polly;
 using Polly.Timeout;
@@ -35,7 +37,11 @@ public static class DependedServicesExtensions
         _ = services.AddMongo()
             .AddMongoRepository<InventoryItem>("inventoryitems")
             .AddMongoRepository<CatalogItem>("catalogitems")
-            .AddMassTransitWithRabbitMq()
+            .AddMassTransitWithRabbitMq(retryConfigurator =>
+            {
+                retryConfigurator.Interval(3, TimeSpan.FromSeconds(5));
+                retryConfigurator.Ignore(typeof(UnknownItemException));
+            })
             .AddJwtBearerAuthentication();
 
         _ = services.AddCatalogClient();
