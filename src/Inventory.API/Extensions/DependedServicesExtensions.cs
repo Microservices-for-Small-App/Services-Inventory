@@ -16,23 +16,11 @@ public static class DependedServicesExtensions
 
     public static IServiceCollection ConfigureDependedServices(this IServiceCollection services, IConfiguration configuration)
     {
-        _ = services.AddSingleton(serviceProvider =>
-        {
-            return serviceProvider.GetService<IConfiguration>()
-                    ?.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>()!;
-        });
+        _ = services.AddSingleton(configuration?.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>()!);
 
-        _ = services.AddSingleton(serviceProvider =>
-        {
-            return serviceProvider.GetService<IConfiguration>()
-                    ?.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>()!;
-        });
+        _ = services.AddSingleton(configuration?.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>()!);
 
-        _ = services.AddSingleton(serviceProvider =>
-        {
-            return serviceProvider.GetService<IConfiguration>()
-                    ?.GetSection(nameof(MongoDbCollectionSettings)).Get<MongoDbCollectionSettings>()!;
-        });
+        _ = services.AddSingleton(configuration?.GetSection(nameof(MongoDbCollectionSettings)).Get<MongoDbCollectionSettings>()!);
 
         _ = services.AddMongo()
             .AddMongoRepository<InventoryItem>("inventoryitems")
@@ -107,3 +95,9 @@ public static class DependedServicesExtensions
     }
 
 }
+
+//_ = services.AddSingleton(serviceProvider =>
+//        {
+//            return serviceProvider.GetService<IConfiguration>()
+//                    ?.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>()!;
+//        });
