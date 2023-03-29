@@ -43,11 +43,16 @@ public class GrantItemsConsumer : IConsumer<GrantItems>
                 AcquiredDate = DateTimeOffset.UtcNow
             };
 
+            inventoryItem.MessageIds.Add(context.MessageId!.Value);
+
             await _inventoryItemsRepository.CreateAsync(inventoryItem);
         }
         else
         {
             inventoryItem.Quantity += message.Quantity;
+
+            inventoryItem.MessageIds.Add(context.MessageId!.Value);
+
             await _inventoryItemsRepository.UpdateAsync(inventoryItem);
         }
 
