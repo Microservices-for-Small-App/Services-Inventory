@@ -49,11 +49,14 @@ public class GrantItemsConsumer : IConsumer<GrantItems>
         }
         else
         {
-            inventoryItem.Quantity += message.Quantity;
+            if (!inventoryItem.MessageIds.Contains(context.MessageId!.Value))
+            {
+                inventoryItem.Quantity += message.Quantity;
 
-            inventoryItem.MessageIds.Add(context.MessageId!.Value);
+                inventoryItem.MessageIds.Add(context.MessageId!.Value);
 
-            await _inventoryItemsRepository.UpdateAsync(inventoryItem);
+                await _inventoryItemsRepository.UpdateAsync(inventoryItem);
+            }
         }
 
         if (retryCount < 2)
