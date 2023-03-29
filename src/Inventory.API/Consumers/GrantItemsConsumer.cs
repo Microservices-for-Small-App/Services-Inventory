@@ -49,14 +49,18 @@ public class GrantItemsConsumer : IConsumer<GrantItems>
         }
         else
         {
-            if (!inventoryItem.MessageIds.Contains(context.MessageId!.Value))
+            if (inventoryItem.MessageIds.Contains(context.MessageId!.Value))
             {
-                inventoryItem.Quantity += message.Quantity;
+                await context.Publish(new InventoryItemsGranted(message.CorrelationId));
 
-                inventoryItem.MessageIds.Add(context.MessageId!.Value);
-
-                await _inventoryItemsRepository.UpdateAsync(inventoryItem);
+                return;
             }
+
+            inventoryItem.Quantity += message.Quantity;
+
+            inventoryItem.MessageIds.Add(context.MessageId!.Value);
+
+            await _inventoryItemsRepository.UpdateAsync(inventoryItem);
         }
 
         if (retryCount < 2)
