@@ -8,6 +8,7 @@ namespace Inventory.API.Consumers;
 
 public class GrantItemsConsumer : IConsumer<GrantItems>
 {
+    private static int retryCount = 0;
     private readonly IRepository<InventoryItem> _inventoryItemsRepository;
     private readonly IRepository<CatalogItem> _catalogItemsRepository;
 
@@ -48,6 +49,12 @@ public class GrantItemsConsumer : IConsumer<GrantItems>
         {
             inventoryItem.Quantity += message.Quantity;
             await _inventoryItemsRepository.UpdateAsync(inventoryItem);
+        }
+
+        if (retryCount < 2)
+        {
+            retryCount++;
+            throw new Exception("Something Bad Happened!");
         }
 
         await context.Publish(new InventoryItemsGranted(message.CorrelationId));
