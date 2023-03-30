@@ -1,7 +1,9 @@
 ﻿using CommonLibrary.Interfaces;
+using Inventory.Contracts;
 using Inventory.Data.Dtos;
 using Inventory.Data.Entities;
 using Inventory.Data.Extensions;
+using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,12 +20,15 @@ public class ItemsController : ControllerBase
 
     private readonly IRepository<InventoryItem> _inventoryItemsRepository;
     private readonly IRepository<CatalogItem> _catalogItemsRepository;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public ItemsController(IRepository<InventoryItem> inventoryItemsRepository, IRepository<CatalogItem> catalogItemsRepository)
+    public ItemsController(IRepository<InventoryItem> inventoryItemsRepository, IRepository<CatalogItem> catalogItemsRepository, IPublishEndpoint publishEndpoint)
     {
         _inventoryItemsRepository = inventoryItemsRepository ?? throw new ArgumentNullException(nameof(inventoryItemsRepository));
 
         _catalogItemsRepository = catalogItemsRepository ?? throw new ArgumentNullException(nameof(catalogItemsRepository));
+
+        _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
     }
 
     [HttpGet]
@@ -55,7 +60,7 @@ public class ItemsController : ControllerBase
         {
             var catalogItem = catalogItemEntities.Single(catalogItem => catalogItem.Id == inventoryItem.CatalogItemId);
 
-            return inventoryItem.AsDto(catalogItem.Name, catalogItem.Description);
+            return inventoryItem.AsDto(catalogItem.Name!, catalogItem.Description!);
         });
 
         return Ok(inventoryItemDtos);
@@ -85,6 +90,8 @@ public class ItemsController : ControllerBase
             inventoryItem.Quantity += grantItemsDto.Quantity;
             await _inventoryItemsRepository.UpdateAsync(inventoryItem);
         }
+
+        await _publishEndpoint.Publish(new InventoryItemUpdated(inventoryItem.UserId, inventoryItem.CatalogItemId, inventoryItem.Quantity));
 
         return Ok();
     }
