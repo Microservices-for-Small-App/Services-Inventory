@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <Platforms>AnyCPU</Platforms>
     <PackageId>Inventory.Contracts</PackageId>
-    <Version>1.0.8</Version>
+    <Version>1.0.9</Version>
     <Authors>Viswanatha Swamy P K</Authors>
     <Company>Home</Company>
     <Product>Small Microservices Application</Product>
@@ -14,7 +14,7 @@
     <Copyright>© 2023 Swamy Home</Copyright>
     <PackageTags>Inventory-Contracts</PackageTags>
     <PackageReleaseNotes>Initial version 1.1</PackageReleaseNotes>
-    <AssemblyVersion>1.8</AssemblyVersion>
+    <AssemblyVersion>1.0.9</AssemblyVersion>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/Microservices-for-Small-App/Services-Inventory</RepositoryUrl>
   </PropertyGroup>
