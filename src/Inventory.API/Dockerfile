@@ -11,12 +11,12 @@ COPY ["src/Inventory.API/Inventory.API.csproj", "src/Inventory.API/"]
 COPY ["src/Inventory.Contracts/Inventory.Contracts.csproj", "src/Inventory.Contracts/"]
 COPY ["src/Inventory.Data/Inventory.Data.csproj", "src/Inventory.Data/"]
 RUN dotnet restore "src/Inventory.API/Inventory.API.csproj"
-COPY . .
+COPY ./src ./src
 WORKDIR "/src/src/Inventory.API"
-RUN dotnet build "Inventory.API.csproj" -c Release -o /app/build
+RUN dotnet build "Inventory.API.csproj" -c Release --no-restore -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Inventory.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Inventory.API.csproj" -c Release --no-restore -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
