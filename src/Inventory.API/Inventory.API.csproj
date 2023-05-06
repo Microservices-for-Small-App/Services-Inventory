@@ -7,7 +7,7 @@
     <UserSecretsId>6f372ecd-37fa-44b4-8103-3ca09b50acba</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
-    <DockerfileRunArguments>--network dakar_default</DockerfileRunArguments>
+    <DockerfileRunArguments>--network dc-mongo-rmq_default</DockerfileRunArguments>
   </PropertyGroup>
 
   <ItemGroup>
