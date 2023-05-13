@@ -20,7 +20,7 @@ public static class HttpRequestPipelineExtensions
 
         app.MapControllers();
 
-        app.MapGet("/", () => "Please use /swagger to see the API documentation.");
+        app.MapGet("/", () => "Please use /swagger to see the Inventory.API documentation.");
 
         return app;
     }
