@@ -1,4 +1,5 @@
-﻿using CommonLibrary.Identity;
+﻿using CommonLibrary.HealthChecks;
+using CommonLibrary.Identity;
 using CommonLibrary.MassTransit;
 using CommonLibrary.MongoDB.Extensions;
 using CommonLibrary.Settings;
@@ -48,6 +49,8 @@ public static class DependedServicesExtensions
             options.AddPolicy("AllowAll", policy => policy.WithOrigins(configuration?["AllowedOrigin"]!)
                                                             .AllowAnyHeader().AllowAnyMethod());
         });
+
+        _ = services.AddHealthChecks().AddMongoDb();
 
         return services;
     }
