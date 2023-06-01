@@ -1,4 +1,6 @@
-﻿namespace Inventory.API.Extensions;
+﻿using CommonLibrary.HealthChecks;
+
+namespace Inventory.API.Extensions;
 
 public static class HttpRequestPipelineExtensions
 {
@@ -21,6 +23,8 @@ public static class HttpRequestPipelineExtensions
         app.MapControllers();
 
         app.MapGet("/", () => "Please use /swagger to see the Inventory.API documentation.");
+
+        app.MapPlayEconomyHealthChecks();
 
         return app;
     }
